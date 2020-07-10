@@ -38,6 +38,7 @@ int main()
     smartPtr<int> *hpb = new smartPtr<int>(*hpa);
     smartPtr<int>  hpd = *hpa;
 
+    std::cout << hpa->getPtrPointer() << std::endl;
     std::cout << hpa->getPtrCounter() << " " << hpb->getPtrCounter() << " "<< hpd.getPtrCounter() << std::endl;
     delete hpa;
     std::cout << hpd.getPtrCounter() << std::endl;
