@@ -5,8 +5,7 @@
 class Base
 {
 public:
-    virtual ~Base()
-    {
+    virtual ~Base() {
         std::cout << "class Base" << std::endl;
     }
 };
@@ -14,8 +13,7 @@ public:
 class Derived1 : public Base
 {
 public:
-    ~Derived1()
-    {
+    ~Derived1() {
         std::cout << "class Derived1" << std::endl;
     }
 };
@@ -23,8 +21,7 @@ public:
 class Derived2 : public Base
 {
 public:
-    ~Derived2()
-    {
+    ~Derived2() {
         std::cout << "class Derived2" << std::endl;
     }
 };

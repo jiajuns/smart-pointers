@@ -4,50 +4,43 @@ template <typename T>
 class smartPtr
 {
 public:
+    // default constructor
     smartPtr()
     : m_ptr(nullptr)
-    , m_counter(new size_t(0))
-    {
+    , m_counter(new size_t(0)) {
     }
 
+    // copy constructor
     smartPtr(T* P)
     : m_ptr(P)
-    , m_counter(new size_t(1))
-    {
+    , m_counter(new size_t(1)) {
     }
 
+    // copy constructor
     smartPtr(const smartPtr<T> &P)
     : m_ptr(P.m_ptr)
-    , m_counter(P.m_counter)
-    {
+    , m_counter(P.m_counter) {
         Inc();
     }
 
-    ~smartPtr()
-    {
+    ~smartPtr() {
         Dec();
     }
 
-    smartPtr operator=(T* P)
-    {
+    smartPtr operator=(T* P) {
         Dec();
-        if (P)
-        {
+        if (P) {
             m_ptr = P;
             m_counter = new size_t(1);
-        }
-        else
-        {
+        } else {
             m_ptr = nullptr;
             m_counter = new size_t(0);
         }
         return *this;
     }
 
-    smartPtr operator=(smartPtr<T> &P)
-    {
-        if (this != &P)
-        {
+    smartPtr operator=(smartPtr<T> &P) {
+        if (this != &P) {
             Dec();
             m_ptr = P.m_ptr;
             m_counter = P.m_counter;
@@ -56,34 +49,31 @@ public:
         return *this;
     }
 
-    operator bool() const
-    {
+    operator bool() const {
         return m_counter != 0;
     }
 
-    T& operator*() const
-    {
+    // dereference
+    T& operator*() const {
         return *m_ptr;
     }
 
-    T* operator->() const
-    {
+    T* operator->() const {
         return m_ptr;
     }
 
+    // deal with derive class cases, that child class cannot access base class private member
     template<typename C> friend class smartPtr;
 
     template<typename C>
     smartPtr(const smartPtr<C> &P)
     : m_ptr(P.m_ptr)
-    , m_counter(P.m_counter)
-    {
+    , m_counter(P.m_counter) {
         Inc();
     }
 
     template<typename C>
-    smartPtr<T> operator=(smartPtr<C> &P)
-    {
+    smartPtr<T> operator=(smartPtr<C> &P) {
         Dec();
         m_ptr = P.m_ptr;
         m_counter = P.m_counter;
@@ -92,12 +82,10 @@ public:
     }
 
     template<typename C>
-    smartPtr<C> Cast() const
-    {
+    smartPtr<C> Cast() const {
         C* converted = dynamic_cast<C*>(m_ptr);
         smartPtr<C> result;
-        if (converted)
-        {
+        if (converted) {
             result.m_ptr = converted;
             result.m_counter = m_counter;
             result.Inc();
@@ -105,23 +93,20 @@ public:
         return result;
     }
 
-    inline int getPtrPointer() const { return *m_ptr; }
+    inline T getPtrPointer() const { return *m_ptr; }
     inline size_t getPtrCounter() const { return *m_counter; }
 
 private:
     T* m_ptr;
     size_t* m_counter;
 
-    void Inc()
-    {
+    void Inc() {
         if (m_counter)
             ++*m_counter;
     }
 
-    void Dec()
-    {
-        if (m_counter && --*m_counter == 0)
-        {
+    void Dec() {
+        if (m_counter && --*m_counter == 0) {
             delete m_ptr;
             delete m_counter;
             m_ptr = nullptr;
